@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BreadcrumbHeader from '../../components/BreadcrumbHeader.astro';
+import { getJobs, locationLabel } from '../../lib/jobs';
+import type { GetStaticPaths } from 'astro';
+import type { Job } from '../../types/job';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const jobs = await getJobs();
+  return jobs.map(job => ({
+    params: { id: job.id },
+    props: { job },
+  }));
+};
+
+interface Props {
+  job: Job;
+}
+
+const { job } = Astro.props;
+const location = locationLabel(job);
+
+const titleStr = `${job.roleTitle} at ${job.companyName} — Vacancy.Design`;
+const descStr = job.summary.slice(0, 155);
+
+const employmentTypeMap: Record<string, string> = {
+  'Full-time': 'FULL_TIME',
+  'Contract': 'CONTRACTOR',
+  'Freelance': 'CONTRACTOR',
+  'Intern': 'INTERN',
+};
+
+const isRemote = job.city === 'Remote' || job.country === 'Remote';
+
+const schema: Record<string, unknown> = {
+  '@context': 'https://schema.org/',
+  '@type': 'JobPosting',
+  title: job.roleTitle,
+  description: job.summary,
+  datePosted: job.postedDate,
+  ...(job.expiryDate ? { validThrough: job.expiryDate } : {}),
+  employmentType: employmentTypeMap[job.employmentType] ?? 'OTHER',
+  hiringOrganization: {
+    '@type': 'Organization',
+    name: job.companyName,
+    ...(job.logoUrl ? { logo: job.logoUrl } : {}),
+  },
+  jobLocation: {
+    '@type': 'Place',
+    address: {
+      '@type': 'PostalAddress',
+      ...(isRemote ? {} : { addressLocality: job.city, addressCountry: job.country }),
+    },
+  },
+  ...(isRemote ? { jobLocationType: 'TELECOMMUTE' } : {}),
+};
+---
+
+<BaseLayout
+  title={titleStr}
+  description={descStr}
+  ogTitle={`${job.roleTitle} at ${job.companyName}`}
+  ogDescription={job.summary}
+  ogUrl={`https://vacancy.design/jobs/${job.id}`}
+  canonical={`https://vacancy.design/jobs/${job.id}`}
+  schema={schema}
+>
+  <div class="px-8 py-10 max-w-2xl">
+    <BreadcrumbHeader page={job.roleTitle} />
+
+    <div class="flex items-start justify-between gap-4 mb-6">
+      <div>
+        <p class="text-[13px] text-[#888888] mb-1">{job.companyName}</p>
+        <h1 class="text-[26px] font-semibold text-[#111111] leading-snug">{job.roleTitle}</h1>
+        <div class="flex items-center gap-3 mt-2 flex-wrap">
+          <span class="text-[13px] text-[#888888] flex items-center gap-1">
+            <svg width="11" height="13" viewBox="0 0 11 13" fill="none" aria-hidden="true">
+              <path d="M5.5 0C3.015 0 1 2.015 1 4.5c0 3.375 4.5 8.5 4.5 8.5s4.5-5.125 4.5-8.5C10 2.015 7.985 0 5.5 0zm0 6.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill="#888888"/>
+            </svg>
+            {location}
+          </span>
+          <span class="text-[13px] text-[#888888]">{job.employmentType}</span>
+        </div>
+      </div>
+      <a
+        href={job.applyUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 bg-[#111111] text-white rounded-full text-[14px] font-medium hover:bg-[#333333] transition-colors"
+      >
+        Apply ↗
+      </a>
+    </div>
+
+    <div class="border-t border-[#E5E5E5] mb-6"></div>
+
+    <p class="text-[15px] text-[#111111] leading-[1.6] mb-8">{job.summary}</p>
+
+    {job.responsibilities.length > 0 && (
+      <div class="mb-8">
+        <h2 class="text-[13px] font-semibold text-[#888888] uppercase tracking-wide mb-4">Responsibilities</h2>
+        <ul class="flex flex-col gap-3">
+          {job.responsibilities.map(r => (
+            <li class="flex items-start gap-2 text-[15px] text-[#111111] leading-[1.6]">
+              <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#888888]"></span>
+              {r}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {job.requirements.length > 0 && (
+      <div class="mb-10">
+        <h2 class="text-[13px] font-semibold text-[#888888] uppercase tracking-wide mb-4">Requirements</h2>
+        <ul class="flex flex-col gap-3">
+          {job.requirements.map(r => (
+            <li class="flex items-start gap-2 text-[15px] text-[#111111] leading-[1.6]">
+              <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#888888]"></span>
+              {r}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <a
+      href={job.applyUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#111111] text-white rounded-full text-[14px] font-medium hover:bg-[#333333] transition-colors"
+    >
+      Apply ↗
+    </a>
+  </div>
+</BaseLayout>

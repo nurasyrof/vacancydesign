@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getJobs } from '../lib/jobs';
+
+const jobs = await getJobs();
+---
+
+<BaseLayout
+  title="About — Vacancy.Design"
+  description="Vacancy.Design is a free, curated job board for designers, built by Asyrof."
+  currentPath="/about"
+  jobCount={jobs.length}
+  breadcrumb="About"
+>
+  <div class="relative flex h-full overflow-hidden">
+    <!-- Content column -->
+    <div class="overflow-y-auto py-8 px-4 md:pl-6 md:pr-20 flex flex-col gap-6 max-w-[692px] w-full relative z-10">
+      <!-- Header row -->
+      <div class="flex items-center justify-between"
+        x-data="{
+          greeting: 'Good morning',
+          init() {
+            const h = new Date().getHours();
+            this.greeting = h >= 5 && h < 12 ? 'Good morning'
+                          : h >= 12 && h < 17 ? 'Good afternoon'
+                          : h >= 17 && h < 20 ? 'Good evening'
+                          : 'Good night';
+          }
+        }"
+      >
+        <p class="font-manrope font-bold text-[16px] text-black" x-text="greeting"></p>
+        <span class="border border-[#333333] rounded-[8px] px-[10px] py-[6px] text-[11px] font-medium text-[#333333] whitespace-nowrap">
+          asyrof@vacancy.design
+        </span>
+      </div>
+
+      <!-- Body copy -->
+      <div class="text-[13px] text-black leading-[1.6] flex flex-col gap-0">
+        <p>Hi, I'm Asyrof.</p>
+        <p>&nbsp;</p>
+        <p>I'm a senior product designer from Yogyakarta, Indonesia — currently designing at <a href="https://lazertechnologies.com/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">Lazer</a>. I've been working remotely for companies in North America for over 8 years.</p>
+        <p>&nbsp;</p>
+        <p class="font-bold">Why I built this</p>
+        <p>&nbsp;</p>
+        <p>One simple reason: equal opportunity.</p>
+        <p>&nbsp;</p>
+        <p>I've been lucky in this industry. Over the years, I've worked with great teams, met brilliant designers from across the globe, and experienced firsthand what it means to have access to world-class opportunities, both in terms of craft and compensation.</p>
+        <p>&nbsp;</p>
+        <p>But back home, remote work only became mainstream after COVID. And even now, with economic uncertainty and layoffs everywhere, I keep thinking: we should be helping each other. Helping each other survive, grow, and keep doing what we love "designing".</p>
+        <p>&nbsp;</p>
+        <p>I genuinely believe every designer brings something valuable to the table. The real blocker isn't talent. It's visibility. Too many great designers are stuck in their city or region, unaware of how many doors are open to them, if they could just get in front of the right people.</p>
+        <p>&nbsp;</p>
+        <p>Vacancy.design is my small attempt to change that radar.</p>
+        <p>&nbsp;</p>
+        <p class="font-bold">Keeping it free</p>
+        <p>&nbsp;</p>
+        <p>This will always be a free, simple curation tool. No paywalls, no noise.</p>
+        <p>If it's helped you in any way, the best thing you can do is share it with friends, colleagues, or on social media.</p>
+        <p>&nbsp;</p>
+        <p>
+          Or if you want to go the extra mile, you can <a href="https://buymeacoffee.com/nurasyrof" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">buy me a coffee</a>. Either way, I'm grateful.
+        </p>
+        <p>&nbsp;</p>
+        <p>Thanks for being here.</p>
+        <p>Asyrof</p>
+      </div>
+    </div>
+
+  </div>
+</BaseLayout>

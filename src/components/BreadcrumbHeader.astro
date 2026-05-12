@@ -1,0 +1,15 @@
+---
+interface Props {
+  page?: string;
+}
+const { page } = Astro.props;
+---
+<div class="text-[13px] text-[#888888] mb-6">
+  <a href="/" class="hover:text-[#111111] transition-colors">VacancyDesign</a>
+  {page && (
+    <>
+      <span class="mx-1">›</span>
+      <span class="text-[#111111]">{page}</span>
+    </>
+  )}
+</div>

@@ -1,0 +1,81 @@
+---
+import FeaturedBadge from './FeaturedBadge.astro';
+import type { Job } from '../types/job';
+import { locationLabel } from '../lib/jobs';
+
+interface Props {
+  job: Job;
+  index: number;
+}
+
+const { job, index } = Astro.props;
+const location = locationLabel(job);
+---
+
+<!-- Mobile layout -->
+<div class="md:hidden px-4 py-6 flex flex-col gap-6 border-b border-[#d8d8d8]">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="relative shrink-0 w-12 h-12">
+        <div class="w-full h-full rounded-[12px] bg-[#d9d9d9] overflow-hidden flex items-center justify-center">
+          {job.logoUrl ? (
+            <img src={job.logoUrl} alt={`${job.companyName} logo`} class="w-full h-full object-cover" loading="lazy" />
+          ) : (
+            <span class="text-[13px] font-semibold text-[#888888]">{job.companyName.charAt(0).toUpperCase()}</span>
+          )}
+        </div>
+        {job.isBoosted && <FeaturedBadge />}
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="text-[12px] text-[#282828] opacity-60 truncate">{job.companyName}</span>
+        <p class="text-[16px] font-bold font-manrope text-black truncate">{job.roleTitle}</p>
+      </div>
+    </div>
+    <a
+      href={job.applyUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-1 bg-black text-white px-[10px] py-[6px] rounded-[8px] text-[13px] font-medium shrink-0 ml-3"
+    >
+      Apply
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </a>
+  </div>
+  <div class="flex items-center gap-1">
+    <img src="/MapPin.svg" width="18" height="18" alt="" aria-hidden="true" />
+    <span class="text-[12px] font-medium text-black whitespace-nowrap">{location}</span>
+  </div>
+</div>
+
+<!-- Desktop layout -->
+<button
+  type="button"
+  class="hidden md:flex w-full text-left px-8 py-8 items-center gap-3 border-b border-[#d8d8d8] focus:outline-none transition-colors"
+  :class={`selectedIndex === ${index} ? 'bg-white border-r-2 border-r-black' : 'bg-transparent hover:bg-white'`}
+  @click={`selectedIndex = ${index}`}
+>
+  <div class="relative shrink-0 w-12 h-12 flex items-center justify-center">
+    <div class="w-full h-full rounded-xl bg-[#d9d9d9] overflow-hidden flex items-center justify-center">
+      {job.logoUrl ? (
+        <img src={job.logoUrl} alt={`${job.companyName} logo`} class="w-full h-full object-cover" loading="lazy" />
+      ) : (
+        <span class="text-[13px] font-semibold text-[#888888]">{job.companyName.charAt(0).toUpperCase()}</span>
+      )}
+    </div>
+    {job.isBoosted && <FeaturedBadge />}
+  </div>
+
+  <div class="flex-1 min-w-0">
+    <div class="flex items-center gap-2 mb-0.5">
+      <span class="text-[12px] text-[#282828] opacity-60 truncate">{job.companyName}</span>
+    </div>
+    <p class="text-[16px] font-bold font-manrope text-black truncate">{job.roleTitle}</p>
+  </div>
+
+  <div class="flex items-center gap-1 shrink-0">
+    <img src="/MapPin.svg" width="18" height="18" alt="" aria-hidden="true" />
+    <span class="text-[12px] font-medium text-black whitespace-nowrap">{location}</span>
+  </div>
+</button>

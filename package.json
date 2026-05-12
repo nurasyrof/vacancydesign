@@ -1,0 +1,22 @@
+{
+  "name": "vacancy-design",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.1.6",
+    "@astrojs/tailwind": "^5.1.0",
+    "alpinejs": "^3.14.1",
+    "astro": "^4.15.0",
+    "papaparse": "^5.4.1",
+    "tailwindcss": "^3.4.10"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5.3.14",
+    "typescript": "^5.5.4"
+  }
+}

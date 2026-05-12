@@ -1,0 +1,12 @@
+---
+interface Props {
+  email: string;
+}
+const { email } = Astro.props;
+---
+<a
+  href={`mailto:${email}`}
+  class="inline-flex items-center px-4 py-2 border border-[#E5E5E5] rounded-full text-[14px] text-[#111111] hover:bg-[#F0F0F0] transition-colors"
+>
+  {email}
+</a>

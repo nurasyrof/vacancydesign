@@ -1,0 +1,136 @@
+---
+---
+
+<aside
+  class="hidden md:flex flex-col h-full shrink-0 border-l border-[#dcdcdc] overflow-y-auto"
+  style="width: 55%"
+>
+  <template x-if="jobs && jobs.length > 0">
+    <div
+      x-data="{ job: null, copied: false }"
+      x-effect="job = jobs[selectedIndex] ?? null"
+      class="flex flex-col min-h-full"
+    >
+      <!-- Sticky header -->
+      <div class="sticky top-0 bg-white z-10 pl-6 pr-20 pt-6 pb-4 border-b border-[#dcdcdc] flex flex-col gap-3">
+        <!-- Role title + actions -->
+        <div class="flex items-center justify-between">
+          <p class="font-manrope font-bold text-[16px] text-black" x-text="job ? job.roleTitle + ' details' : 'Job details'"></p>
+          <div class="flex items-center gap-2 shrink-0">
+            <!-- Copy link button -->
+            <button
+              type="button"
+              @click="
+                navigator.clipboard.writeText(window.location.origin + '/?job=' + (job && job.id));
+                copied = true;
+                setTimeout(() => { copied = false }, 2000)
+              "
+              class="border border-black rounded-[8px] h-8 flex items-center justify-center gap-1.5 overflow-hidden transition-all duration-200"
+              :class="copied ? 'px-[10px] w-auto' : 'w-8'"
+              title="Copy link"
+            >
+              <svg
+                x-show="!copied"
+                width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+              </svg>
+              <span
+                x-show="copied"
+                class="text-[11px] font-medium text-black whitespace-nowrap"
+              >URL copied to clipboard</span>
+            </button>
+
+            <!-- Apply button -->
+            <a
+              :href="job && job.applyUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1 bg-black text-white px-[10px] py-[6px] rounded-[8px] text-[13px] font-medium hover:bg-[#333333] transition-colors"
+            >
+              Apply
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M7 17L17 7M17 7H7M17 7v10"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Location + employment type -->
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-[12px] font-medium text-[#282828] opacity-60 flex items-center gap-1">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M9 1.5C6.515 1.5 4.5 3.515 4.5 6c0 3.375 4.5 10.5 4.5 10.5s4.5-7.125 4.5-10.5C13.5 3.515 11.485 1.5 9 1.5zm0 6.75a2.25 2.25 0 1 1 0-4.5 2.25 2.25 0 0 1 0 4.5z" fill="#282828"/>
+            </svg>
+            <span x-text="job && job.location"></span>
+          </span>
+          <span class="text-[12px] font-medium text-[#282828] opacity-60" x-text="job && job.employmentType"></span>
+        </div>
+      </div>
+
+      <!-- Scrollable content -->
+      <div class="pl-6 pr-20 py-6 flex flex-col gap-6">
+        <!-- Summary blocks -->
+        <div class="flex flex-col gap-3">
+          <template x-if="job && job.summaryBlocks">
+            <div class="flex flex-col gap-3">
+              <template x-for="(block, i) in job.summaryBlocks" :key="i">
+                <div>
+                  <template x-if="block.type === 'heading'">
+                    <h3 class="text-[13px] font-bold text-black" x-text="block.text"></h3>
+                  </template>
+                  <template x-if="block.type === 'paragraph'">
+                    <p class="text-[13px] text-black leading-[1.6]" x-text="block.text"></p>
+                  </template>
+                  <template x-if="block.type === 'bullets'">
+                    <ul class="flex flex-col gap-2">
+                      <template x-for="item in block.items" :key="item">
+                        <li class="flex items-start gap-2 text-[13px] text-black leading-[1.6]">
+                          <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#282828]"></span>
+                          <span x-text="item"></span>
+                        </li>
+                      </template>
+                    </ul>
+                  </template>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+
+        <!-- Responsibilities -->
+        <template x-if="job && job.responsibilities && job.responsibilities.length">
+          <div>
+            <h3 class="text-[13px] font-bold text-black mb-3">Responsibilities</h3>
+            <ul class="flex flex-col gap-2">
+              <template x-for="item in job.responsibilities" :key="item">
+                <li class="flex items-start gap-2 text-[13px] text-black leading-[1.6]">
+                  <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#282828]"></span>
+                  <span x-text="item"></span>
+                </li>
+              </template>
+            </ul>
+          </div>
+        </template>
+
+        <!-- Requirements -->
+        <template x-if="job && job.requirements && job.requirements.length">
+          <div>
+            <h3 class="text-[13px] font-bold text-black mb-3">Requirements</h3>
+            <ul class="flex flex-col gap-2">
+              <template x-for="item in job.requirements" :key="item">
+                <li class="flex items-start gap-2 text-[13px] text-black leading-[1.6]">
+                  <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#282828]"></span>
+                  <span x-text="item"></span>
+                </li>
+              </template>
+            </ul>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+</aside>

@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getJobs } from '../lib/jobs';
+
+const jobs = await getJobs();
+---
+
+<BaseLayout
+  title="Post a Job — Vacancy.Design"
+  description="Reach designers who are actively looking. Post a free listing or boost your role for maximum visibility."
+  currentPath="/post-a-job"
+  jobCount={jobs.length}
+  breadcrumb="Post a Job"
+>
+  <div class="relative flex h-full overflow-hidden">
+    <!-- Content column -->
+    <div class="overflow-y-auto py-8 px-4 md:pl-6 md:pr-20 flex flex-col gap-6 max-w-[692px] w-full relative z-10">
+
+      <!-- Heading -->
+      <p class="font-manrope font-bold text-[16px] text-black">Reach designers who are actively looking</p>
+
+      <!-- Cards -->
+      <div class="flex flex-col md:flex-row gap-6 items-start">
+
+        <!-- Free listing -->
+        <div class="w-full md:flex-1 bg-[#f7f7f7] rounded-[8px] p-6 flex flex-col gap-6">
+          <div class="text-[13px] text-black leading-[1.6]">
+            <p class="font-bold">Free listing</p>
+            <p>&nbsp;</p>
+            <p>Get your role in front of a curated, global community of product designers, UI/UX designers, and design-adjacent talent. No sign-up friction, no gatekeeping.</p>
+            <p>&nbsp;</p>
+            <p>Every listing goes live within 24 hours and stays active for 30 days.</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+          </div>
+          <a
+            href="https://tally.so/r/b5Kj60"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center bg-[#2c2c2c] text-white font-manrope font-bold text-[12px] px-3 py-2 rounded-[8px] w-full md:w-fit hover:bg-black transition-colors"
+          >
+            Post for free
+          </a>
+        </div>
+
+        <!-- Boost listing -->
+        <div
+          class="w-full md:flex-1 rounded-[8px] p-6 flex flex-col gap-6"
+          style="background: linear-gradient(135deg, #737373 0%, #565656 25%, #393939 50%, #2b2b2b 62.5%, #1d1d1d 75%, #0e0e0e 87.5%, #000000 100%)"
+        >
+          <div class="text-[13px] text-white leading-[1.6]">
+            <p class="font-bold">Boost your listing for $100</p>
+            <p>&nbsp;</p>
+            <p>Want to stay top of mind? Boosted listings are pinned at the top of the board for a full month. First seen, first considered.</p>
+            <p>&nbsp;</p>
+            <ul class="list-disc ml-5 flex flex-col gap-0">
+              <li>Pinned at the top for 30 days</li>
+              <li>Highlighted with a "Featured" badge</li>
+              <li>Ideal for competitive roles or time-sensitive hiring</li>
+            </ul>
+          </div>
+          <button
+            type="button"
+            disabled
+            class="inline-flex items-center justify-center bg-white/25 text-white/50 font-manrope font-bold text-[12px] px-3 py-2 rounded-[8px] w-full md:w-fit cursor-default"
+          >
+            Coming soon
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <p class="text-[13px] text-black">
+        Questions? Reach out at <a href="mailto:hello@vacancy.design" class="underline underline-offset-2 hover:text-[#555] transition-colors">hello@vacancy.design</a>
+      </p>
+
+    </div>
+
+  </div>
+</BaseLayout>

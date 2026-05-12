@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getJobs } from '../lib/jobs';
+
+const jobs = await getJobs();
+---
+
+<BaseLayout
+  title="Terms of Use — Vacancy.Design"
+  description="Terms of use for Vacancy.Design, the free curated design job board."
+  currentPath="/terms"
+  jobCount={jobs.length}
+  breadcrumb="Terms"
+>
+  <div class="relative flex h-full overflow-hidden">
+    <div class="overflow-y-auto py-8 px-4 md:pl-6 md:pr-20 flex flex-col gap-6 max-w-[692px] w-full relative z-10">
+
+      <!-- Header row -->
+      <div class="flex items-center justify-between">
+        <p class="font-manrope font-bold text-[16px] text-black">Terms of Use</p>
+        <a
+          href="mailto:hello@vacancy.design"
+          class="border border-[#333333] rounded-[8px] px-[10px] py-[6px] text-[11px] font-medium text-[#333333] whitespace-nowrap hover:bg-[#f7f7f7] transition-colors"
+        >
+          hello@vacancy.design
+        </a>
+      </div>
+
+      <!-- Body -->
+      <div class="text-[13px] text-black leading-[1.6] flex flex-col gap-4">
+        <p>Last updated: May 2026</p>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-bold">1. What Vacancy.design is</p>
+          <p>Vacancy.design is a free job curation tool for designers. We collect and list design-related job opportunities from around the web to make them easier to discover in one place.</p>
+          <p>We are not a recruiter, staffing agency, or job platform. We do not manage applications, represent employers, or guarantee the accuracy of any listing.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-bold">2. How listings work</p>
+          <p>Jobs listed on Vacancy.design are curated from publicly available sources. When you click "Apply" on any listing, you are taken directly to the employer's own application page, outside of this site. From that point, your application is entirely between you and the hiring company.</p>
+          <p>We have no visibility into, or involvement with, what happens after you leave this site.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-bold">3. No account, no login</p>
+          <p>Vacancy.design does not require you to create an account or log in to browse or apply for any listing. We keep it that way intentionally.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-bold">4. Accuracy of listings</p>
+          <p>We do our best to curate relevant, active listings, but we cannot guarantee that every job posted is still open, accurately described, or from a verified employer. Always do your own due diligence before applying.</p>
+          <p>If you spot an outdated or incorrect listing, please let us know at <a href="mailto:hello@vacancy.design" class="underline underline-offset-2">hello@vacancy.design</a> and we'll take it down.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-bold">5. Employers and job posters</p>
+          <p>If you post a job on Vacancy.design, you confirm that the listing is real, accurate, and that you have the authority to post it. We reserve the right to remove any listing that is misleading, inappropriate, or violates these terms — at our discretion, without notice.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-bold">6. No warranties</p>
+          <p>Vacancy.design is provided as-is. We make no guarantees about uptime, listing completeness, or outcomes from using this site. Use it at your own risk — though honestly, the risk here is pretty low.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-bold">7. Changes to these terms</p>
+          <p>We may update these terms occasionally. If we do, the "Last updated" date at the top changes. Continued use of the site means you're okay with the current version.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-bold">8. Contact</p>
+          <p>Questions about these terms? <a href="mailto:hello@vacancy.design" class="underline underline-offset-2">hello@vacancy.design</a></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>

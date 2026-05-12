@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getJobs } from '../lib/jobs';
+
+const jobs = await getJobs();
+---
+
+<BaseLayout
+  title="Privacy Policy — Vacancy.Design"
+  description="Privacy policy for Vacancy.Design. We don't collect your data. No tracking, no ads, no accounts."
+  currentPath="/privacy"
+  jobCount={jobs.length}
+  breadcrumb="Privacy Policy"
+>
+  <div class="relative flex h-full overflow-hidden">
+    <div class="overflow-y-auto py-8 px-4 md:pl-6 md:pr-20 flex flex-col gap-6 max-w-[692px] w-full relative z-10">
+
+      <!-- Header row -->
+      <div class="flex items-center justify-between">
+        <p class="font-manrope font-bold text-[16px] text-black">Privacy Policy</p>
+        <a
+          href="mailto:hello@vacancy.design"
+          class="border border-[#333333] rounded-[8px] px-[10px] py-[6px] text-[11px] font-medium text-[#333333] whitespace-nowrap hover:bg-[#f7f7f7] transition-colors"
+        >
+          hello@vacancy.design
+        </a>
+      </div>
+
+      <p class="text-[13px] text-black leading-[1.6]">Last updated: May 2026</p>
+
+      <!-- Short version card -->
+      <div class="bg-[#f6f6f6] rounded-[8px] px-3 py-2 flex flex-col gap-2">
+        <p class="text-[13px] font-semibold text-black leading-[1.6]">The short version</p>
+        <p class="text-[13px] text-black leading-[1.6]">We don't collect your personal data. We don't track you. We don't run ads. There are no accounts, no cookies tied to you as a person, and no database storing your information.</p>
+        <p class="text-[13px] text-black leading-[1.6]">That's the whole story — but here's the longer version for completeness.</p>
+      </div>
+
+      <!-- Body -->
+      <div class="text-[13px] text-black leading-[1.6] flex flex-col gap-4">
+
+        <div class="flex flex-col gap-1">
+          <p class="font-semibold">1. What we collect</p>
+          <p>Nothing that identifies you personally.</p>
+          <p>Like most websites, our hosting provider may log basic technical data — IP addresses, browser type, pages visited, time of visit — for server performance and security purposes. This is standard infrastructure logging, not user tracking. We do not access or use this data for marketing or analytics.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-semibold">2. Cookies</p>
+          <p>We do not use tracking cookies, advertising cookies, or analytics cookies. If our hosting environment sets any technical cookies for basic site function, they contain no personal information and are not used to identify or follow you.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-semibold">3. When you apply for a job</p>
+          <p>When you click "Apply" on any listing, you are redirected directly to the employer's own website or application portal. At that point, you leave Vacancy.design entirely.</p>
+          <p>Any information you submit as part of your application — your name, resume, email, or anything else — goes to the employer, not to us. We never see it, receive it, or store it. The employer's own privacy policy governs what happens next.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-semibold">4. When you post a job</p>
+          <p>If you post a job listing, we collect only what you voluntarily submit in the posting form — typically a job title, description, company name, and application link. This information is published publicly on the site. We do not tie it to any personal profile or account.</p>
+          <p>For boosted listings, payment is processed by a third-party payment provider. We do not store your payment details.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-semibold">5. Third-party services</p>
+          <p>We may use minimal third-party infrastructure (hosting, CDN, payment processing for boosts). These providers have their own privacy policies. We choose providers that respect user privacy and do not use your data for their own advertising.</p>
+          <p>We do not use Google Analytics, Meta Pixel, or similar tracking tools.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-semibold">6. Children</p>
+          <p>Vacancy.design is not directed at children under 13 and we do not knowingly collect data from them.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-semibold">7. Changes to this policy</p>
+          <p>If we make meaningful changes to this policy, the "Last updated" date at the top will reflect that. Since we collect almost nothing, changes here should be rare.</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p class="font-semibold">8. Contact</p>
+          <p>Privacy questions or concerns? Reach out at <a href="mailto:hello@vacancy.design" class="underline underline-offset-2">hello@vacancy.design</a> — a real person will read it.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>

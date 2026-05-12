@@ -1,0 +1,90 @@
+---
+import NavSidebar from '../components/NavSidebar.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogUrl?: string;
+  canonical?: string;
+  jobCount?: number;
+  currentPath?: string;
+  schema?: object;
+  breadcrumb?: string;
+}
+
+const {
+  title = 'Vacancy.Design — Curated Design Jobs',
+  description = 'A free, curated job board exclusively for designers. No sign-up, no noise.',
+  ogTitle,
+  ogDescription,
+  ogUrl,
+  canonical,
+  jobCount = 0,
+  currentPath = '/',
+  schema,
+  breadcrumb,
+} = Astro.props;
+
+const resolvedCanonical = canonical ?? `https://vacancy.design${Astro.url.pathname}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={resolvedCanonical} />
+
+    <meta property="og:title" content={ogTitle ?? title} />
+    <meta property="og:description" content={ogDescription ?? description} />
+    <meta property="og:url" content={ogUrl ?? resolvedCanonical} />
+    <meta property="og:type" content="website" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700&display=swap" rel="stylesheet" />
+
+    {schema && (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    )}
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+  <body class="bg-white text-[#111111] font-sans antialiased h-screen overflow-hidden flex flex-col">
+    <!-- Desktop header -->
+    <header class="hidden md:flex h-[80px] shrink-0 border-b border-[#dcdcdc] items-center gap-3 px-[80px]">
+      <a href="/" class="flex items-center gap-3">
+        <img src="/logo.svg" alt="Vacancy.Design" width="29" height="32" />
+        <span class="font-manrope font-bold text-[20px] text-black">VacancyDesign</span>
+      </a>
+      {breadcrumb && (
+        <>
+          <span class="font-manrope font-bold text-[20px] text-black opacity-40">{'>'}</span>
+          <span class="font-manrope font-bold text-[20px] text-black">{breadcrumb}</span>
+        </>
+      )}
+    </header>
+
+    <!-- Body row -->
+    <div class="flex flex-col md:flex-row flex-1 overflow-hidden min-h-0">
+      <NavSidebar currentPath={currentPath} jobCount={jobCount} breadcrumb={breadcrumb} />
+      <main class="flex-1 min-w-0 overflow-hidden relative">
+        <slot />
+        {currentPath !== '/' && (
+          <img
+            src="/logo-accent.svg"
+            alt=""
+            aria-hidden="true"
+            class="fixed bottom-0 right-0 w-[672px] pointer-events-none select-none"
+            style="z-index: 0"
+          />
+        )}
+      </main>
+    </div>
+  </body>
+</html>

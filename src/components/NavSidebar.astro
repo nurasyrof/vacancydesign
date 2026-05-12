@@ -1,0 +1,158 @@
+---
+interface Props {
+  currentPath: string;
+  jobCount?: number;
+  breadcrumb?: string;
+}
+
+const { currentPath, jobCount = 0, breadcrumb } = Astro.props;
+
+const mobileBreadcrumb = currentPath === '/'
+  ? `/ Jobs (${jobCount})`
+  : breadcrumb ? `/ ${breadcrumb}` : 'Vacancy.Design';
+
+const isActive = (path: string) => currentPath === path;
+
+const navItems = [
+  { label: `Jobs (${jobCount})`, href: '/' },
+  { label: 'About', href: '/about' },
+  { label: 'Post a Job', href: '/post-a-job' },
+  { label: 'Donate', href: 'https://buymeacoffee.com/nurasyrof', external: true },
+];
+
+const secondaryItems = [
+  { label: 'FAQs', href: '/faqs' },
+  { label: 'Terms', href: '/terms' },
+  { label: 'Privacy', href: '/privacy' },
+];
+---
+
+<!-- Desktop sidebar -->
+<nav class="hidden md:flex flex-col w-[205px] shrink-0 h-full border-r border-[#dcdcdc] pl-[80px] pr-8 py-8 justify-between">
+  <!-- Primary nav -->
+  <ul class="flex flex-col gap-1">
+    {navItems.map(item => (
+      <li>
+        {item.external ? (
+          <a
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block px-[10px] py-[6px] rounded-[8px] text-[13px] font-medium text-[#282828] opacity-60 hover:opacity-100 hover:bg-[#e9e9e9] transition-all"
+          >
+            {item.label}
+          </a>
+        ) : (
+          <a
+            href={item.href}
+            class={`block px-[10px] py-[6px] rounded-[8px] text-[13px] font-medium transition-all ${
+              isActive(item.href)
+                ? 'bg-[#e9e9e9] text-black opacity-100'
+                : 'text-[#282828] opacity-60 hover:opacity-100 hover:bg-[#e9e9e9]'
+            }`}
+          >
+            {item.label}
+          </a>
+        )}
+      </li>
+    ))}
+  </ul>
+
+  <!-- Secondary nav -->
+  <ul class="flex flex-col gap-1">
+    {secondaryItems.map(item => (
+      <li>
+        <a
+          href={item.href}
+          class={`block px-[10px] py-[6px] rounded-[8px] text-[13px] font-medium transition-all ${
+            isActive(item.href)
+              ? 'bg-[#e9e9e9] text-black opacity-100'
+              : 'text-[#282828] opacity-60 hover:opacity-100 hover:bg-[#e9e9e9]'
+          }`}
+        >
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<!-- Mobile top bar -->
+<header class="md:hidden h-[72px] shrink-0 flex items-center justify-between px-4 border-b border-[#dcdcdc]">
+  <a href="/" class="flex items-center gap-3">
+    <img src="/logo.svg" alt="Vacancy.Design" width="29" height="32" />
+    <span class="font-manrope font-bold text-[20px] text-black">{mobileBreadcrumb}</span>
+  </a>
+  <button
+    x-data
+    @click="$dispatch('toggle-mobile-menu')"
+    class="p-2 rounded-lg hover:bg-[#F0F0F0]"
+    aria-label="Open menu"
+  >
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M3 5h14M3 10h14M3 15h14" stroke="#111111" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+</header>
+
+<!-- Mobile menu overlay -->
+<div
+  x-data="{ open: false }"
+  @toggle-mobile-menu.window="open = !open"
+  class="md:hidden"
+>
+  <div
+    x-show="open"
+    x-transition:enter="transition duration-150"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition duration-100"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="fixed inset-0 z-50 bg-white flex flex-col"
+  >
+    <!-- Menu header -->
+    <div class="h-[72px] shrink-0 flex items-center justify-between px-4 border-b border-[#dcdcdc]">
+      <a href="/" class="flex items-center gap-3">
+        <img src="/logo.svg" alt="Vacancy.Design" width="29" height="32" />
+        <span class="font-manrope font-bold text-[20px] text-black">/ Menu</span>
+      </a>
+      <button
+        @click="open = false"
+        class="p-2 rounded-lg hover:bg-[#f0f0f0]"
+        aria-label="Close menu"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="#111111" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Nav items — right-aligned -->
+    <div class="flex flex-col items-end gap-4 px-4 py-6">
+      {[...navItems, ...secondaryItems].map(item => (
+        item.external ? (
+          <a
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-[10px] py-[6px] rounded-[8px] text-[13px] font-medium text-[#282828] opacity-60"
+          >
+            {item.label}
+          </a>
+        ) : (
+          <a
+            href={item.href}
+            class={`px-[10px] py-[6px] rounded-[8px] text-[13px] font-medium ${
+              isActive(item.href)
+                ? 'bg-[#e9e9e9] text-black'
+                : 'text-[#282828] opacity-60'
+            }`}
+          >
+            {item.label}
+          </a>
+        )
+      ))}
+    </div>
+  </div>
+</div>

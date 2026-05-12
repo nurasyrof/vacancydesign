@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getJobs } from '../lib/jobs';
+
+const jobs = await getJobs();
+
+const sections = [
+  {
+    title: 'About Vacancy.design',
+    items: [
+      {
+        question: 'What is Vacancy.design?',
+        answer: "A free, curated job board for designers. We hand-pick design roles from around the web — product design, UI/UX, motion, brand, and more — so you don't have to dig through the noise on generic job platforms.",
+      },
+      {
+        question: 'Who is this for?',
+        answer: "Any designer looking for work — whether you're based in Southeast Asia, Europe, Latin America, or anywhere else. We built this especially with designers in emerging markets in mind, where access to global remote opportunities isn't always obvious.",
+      },
+      {
+        question: 'Is it really free?',
+        answer: 'Yes, completely. Browsing and applying costs nothing, and it always will.',
+      },
+    ],
+  },
+  {
+    title: 'Applying for Jobs',
+    items: [
+      {
+        question: 'How do I apply for a job?',
+        answer: `Click the "Apply" button on any listing. You'll be taken directly to the employer's own application page — on their website or their hiring platform. The application process is entirely theirs, not ours.`,
+      },
+      {
+        question: 'Do I need to create an account?',
+        answer: 'No. There are no accounts, no sign-ups, no login walls. Just browse and apply.',
+      },
+      {
+        question: 'Can I save or bookmark listings?',
+        answer: "Not yet — we're keeping things simple for now. In the meantime, your browser bookmarks work just fine.",
+      },
+      {
+        question: 'I clicked Apply but the job is already closed. What happened?',
+        answerHtml: `Listings can go stale — companies fill roles fast. If you find a closed or broken listing, let us know at <a href="mailto:hello@vacancy.design" class="underline underline-offset-2">hello@vacancy.design</a> and we'll remove it promptly.`,
+      },
+    ],
+  },
+  {
+    title: 'Posting a Job',
+    items: [
+      {
+        question: 'How do I post a job?',
+        answer: 'Head to the Post a Job page and fill in the details. Every listing is reviewed before going live, usually within 24 hours.',
+      },
+      {
+        question: 'How long does a listing stay up?',
+        answer: 'Standard listings stay active for 30 days. Boosted listings are pinned at the top of the board for 30 days.',
+      },
+      {
+        question: "What's the difference between a free listing and a boosted one?",
+        answer: `Free listings go live in the regular feed. Boosted listings ($100) are pinned at the top of the board for a full month and marked with a "Featured" badge — giving them significantly more visibility.`,
+      },
+      {
+        question: 'Can I edit or remove my listing after posting?',
+        answerHtml: `Yes. Email us at <a href="mailto:hello@vacancy.design" class="underline underline-offset-2">hello@vacancy.design</a> with your listing details and we'll handle it.`,
+      },
+      {
+        question: 'What kinds of jobs can I post?',
+        answer: 'Design roles only — product design, UX, UI, visual design, motion, design systems, brand, and adjacent roles like design ops or UX research. Off-topic listings will be removed.',
+      },
+      {
+        question: "Can I post a role that's not remote?",
+        answer: "Yes, on-site and hybrid roles are welcome. Just make sure the location is clearly stated in your listing so candidates know what they're applying for.",
+      },
+    ],
+  },
+  {
+    title: 'The Listings',
+    items: [
+      {
+        question: 'Where do the curated listings come from?',
+        answer: 'We find them from company career pages, design community job boards, newsletters, and direct submissions. Everything is reviewed before it goes up.',
+      },
+      {
+        question: 'How often are listings updated?',
+        answer: 'We update the board regularly — typically a few times a week. Boosted listings are always kept current.',
+      },
+      {
+        question: 'I found an outdated, fake, or inappropriate listing. What should I do?',
+        answerHtml: `Please report it to <a href="mailto:hello@vacancy.design" class="underline underline-offset-2">hello@vacancy.design</a>. We take listing quality seriously and will remove anything that doesn't belong.`,
+      },
+    ],
+  },
+  {
+    title: 'About the Creator',
+    items: [
+      {
+        question: 'Who built this?',
+        answer: "Asyrof — a senior product designer from Yogyakarta, Indonesia, with 8+ years of experience working remotely for companies in North America and Europe. Vacancy.design is a personal project built out of a belief that geography shouldn't limit a designer's opportunities.",
+      },
+      {
+        question: 'How can I support this project?',
+        answerHtml: `Spread the word. Share it with a designer friend, post it on social media, or mention it in your design community. That's the best support possible. If you want to do a little more, you can <a href="https://buymeacoffee.com/nurasyrof" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">buy me a coffee</a> — the link is on the About page.`,
+      },
+      {
+        question: 'I have a suggestion or feedback.',
+        answerHtml: `Please send it — <a href="mailto:hello@vacancy.design" class="underline underline-offset-2">hello@vacancy.design</a>. This is a small tool built to serve the design community, so your input genuinely shapes what it becomes.`,
+      },
+    ],
+  },
+];
+
+// Assign a flat global index to every item for the single-open accordion
+let globalIndex = 0;
+const sectionsWithIndex = sections.map(section => ({
+  ...section,
+  items: section.items.map(item => ({ ...item, index: globalIndex++ })),
+}));
+---
+
+<BaseLayout
+  title="FAQs — Vacancy.Design"
+  description="Frequently asked questions about Vacancy.Design, the free curated design job board."
+  currentPath="/faqs"
+  jobCount={jobs.length}
+  breadcrumb="FAQs"
+>
+  <div class="relative flex h-full overflow-hidden">
+    <div
+      class="overflow-y-auto py-8 px-4 md:pl-6 md:pr-20 flex flex-col gap-6 max-w-[692px] w-full relative z-10"
+      x-data="{ active: 0 }"
+    >
+      <!-- Header row -->
+      <div class="flex items-center justify-between">
+        <p class="font-manrope font-bold text-[16px] text-black">Frequently Asked Questions</p>
+        <a
+          href="mailto:hello@vacancy.design"
+          class="border border-[#333333] rounded-[8px] px-[10px] py-[6px] text-[11px] font-medium text-[#333333] whitespace-nowrap hover:bg-[#f7f7f7] transition-colors"
+        >
+          hello@vacancy.design
+        </a>
+      </div>
+
+      <!-- Sections -->
+      {sectionsWithIndex.map(section => (
+        <div class="flex flex-col gap-4">
+          <p class="font-bold text-[13px] text-black">{section.title}</p>
+
+          <div class="bg-white border border-[#dbdbdb] rounded-[8px] px-4 py-6 flex flex-col gap-6">
+            {section.items.map((item, i) => (
+              <>
+                <div class="flex flex-col gap-2">
+                  <button
+                    type="button"
+                    class="flex items-center justify-between w-full text-left focus:outline-none"
+                    @click={`active = active === ${item.index} ? null : ${item.index}`}
+                  >
+                    <span class="font-medium text-[13px] text-black leading-[1.6]">{item.question}</span>
+                    <svg
+                      width="16" height="16" viewBox="0 0 16 16" fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="shrink-0 ml-3 transition-transform duration-200"
+                      :class={`active === ${item.index} ? 'rotate-180' : ''`}
+                      aria-hidden="true"
+                    >
+                      <path d="M3 6l5 5 5-5" stroke="#282828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <div
+                    x-show={`active === ${item.index}`}
+                    x-transition:enter="transition duration-150"
+                    x-transition:enter-start="opacity-0 -translate-y-1"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    x-transition:leave="transition duration-100"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                  >
+                    {'answerHtml' in item ? (
+                      <p class="text-[13px] text-black opacity-60 leading-[1.6]" set:html={item.answerHtml} />
+                    ) : (
+                      <p class="text-[13px] text-black opacity-60 leading-[1.6]">{item.answer}</p>
+                    )}
+                  </div>
+                </div>
+                {i < section.items.length - 1 && (
+                  <div class="h-px bg-[#d9d9d9]" />
+                )}
+              </>
+            ))}
+          </div>
+        </div>
+      ))}
+
+    </div>
+  </div>
+</BaseLayout>
