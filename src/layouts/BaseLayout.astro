@@ -16,7 +16,7 @@ interface Props {
 
 const {
   title = 'Vacancy.Design — Curated Design Jobs',
-  description = 'A free, curated job board exclusively for designers. No sign-up, no noise.',
+  description = 'Free curated design jobs — product design, UI/UX, motion, brand & remote vacancies. Lowongan kerja desainer, loker remote, info loker desain. No sign-up.',
   ogTitle,
   ogDescription,
   ogUrl,
@@ -43,6 +43,11 @@ const resolvedCanonical = canonical ?? `https://vacancy.design${Astro.url.pathna
     <meta property="og:description" content={ogDescription ?? description} />
     <meta property="og:url" content={ogUrl ?? resolvedCanonical} />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://vacancy.design/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://vacancy.design/og-image.jpg" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
