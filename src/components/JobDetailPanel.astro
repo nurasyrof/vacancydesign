@@ -111,66 +111,59 @@
           <p class="text-[13px] text-black leading-[1.6] whitespace-pre-line" x-text="job.postText || job.summary"></p>
         </template>
 
-        <!-- Standard content (non-social jobs) -->
-        <template x-if="job && !job.postType">
-          <div class="flex flex-col gap-6">
-            <!-- Summary blocks -->
-            <div class="flex flex-col gap-3">
-              <template x-if="job && job.summaryBlocks">
-                <div class="flex flex-col gap-3">
-                  <template x-for="(block, i) in job.summaryBlocks" :key="i">
-                    <div>
-                      <template x-if="block.type === 'heading'">
-                        <h3 class="text-[13px] font-bold text-black" x-text="block.text"></h3>
-                      </template>
-                      <template x-if="block.type === 'paragraph'">
-                        <p class="text-[13px] text-black leading-[1.6]" x-text="block.text"></p>
-                      </template>
-                      <template x-if="block.type === 'bullets'">
-                        <ul class="flex flex-col gap-2">
-                          <template x-for="item in block.items" :key="item">
-                            <li class="flex items-start gap-2 text-[13px] text-black leading-[1.6]">
-                              <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#282828]"></span>
-                              <span x-text="item"></span>
-                            </li>
-                          </template>
-                        </ul>
-                      </template>
-                    </div>
-                  </template>
-                </div>
+        <!-- Summary blocks (standard jobs only) -->
+        <template x-if="job && !job.postType && job.summaryBlocks">
+          <div class="flex flex-col gap-3">
+            <template x-for="(block, i) in job.summaryBlocks" :key="i">
+              <div>
+                <template x-if="block.type === 'heading'">
+                  <h3 class="text-[13px] font-bold text-black" x-text="block.text"></h3>
+                </template>
+                <template x-if="block.type === 'paragraph'">
+                  <p class="text-[13px] text-black leading-[1.6]" x-text="block.text"></p>
+                </template>
+                <template x-if="block.type === 'bullets'">
+                  <ul class="flex flex-col gap-2">
+                    <template x-for="item in block.items" :key="item">
+                      <li class="flex items-start gap-2 text-[13px] text-black leading-[1.6]">
+                        <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#282828]"></span>
+                        <span x-text="item"></span>
+                      </li>
+                    </template>
+                  </ul>
+                </template>
+              </div>
+            </template>
+          </div>
+        </template>
+
+        <!-- Responsibilities (always shown when filled) -->
+        <template x-if="job && job.responsibilities && job.responsibilities.length">
+          <div>
+            <h3 class="text-[13px] font-bold text-black mb-3">Responsibilities</h3>
+            <ul class="flex flex-col gap-2">
+              <template x-for="item in job.responsibilities" :key="item">
+                <li class="flex items-start gap-2 text-[13px] text-black leading-[1.6]">
+                  <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#282828]"></span>
+                  <span x-text="item"></span>
+                </li>
               </template>
-            </div>
+            </ul>
+          </div>
+        </template>
 
-            <!-- Responsibilities -->
-            <template x-if="job && job.responsibilities && job.responsibilities.length">
-              <div>
-                <h3 class="text-[13px] font-bold text-black mb-3">Responsibilities</h3>
-                <ul class="flex flex-col gap-2">
-                  <template x-for="item in job.responsibilities" :key="item">
-                    <li class="flex items-start gap-2 text-[13px] text-black leading-[1.6]">
-                      <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#282828]"></span>
-                      <span x-text="item"></span>
-                    </li>
-                  </template>
-                </ul>
-              </div>
-            </template>
-
-            <!-- Requirements -->
-            <template x-if="job && job.requirements && job.requirements.length">
-              <div>
-                <h3 class="text-[13px] font-bold text-black mb-3">Requirements</h3>
-                <ul class="flex flex-col gap-2">
-                  <template x-for="item in job.requirements" :key="item">
-                    <li class="flex items-start gap-2 text-[13px] text-black leading-[1.6]">
-                      <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#282828]"></span>
-                      <span x-text="item"></span>
-                    </li>
-                  </template>
-                </ul>
-              </div>
-            </template>
+        <!-- Requirements (always shown when filled) -->
+        <template x-if="job && job.requirements && job.requirements.length">
+          <div>
+            <h3 class="text-[13px] font-bold text-black mb-3">Requirements</h3>
+            <ul class="flex flex-col gap-2">
+              <template x-for="item in job.requirements" :key="item">
+                <li class="flex items-start gap-2 text-[13px] text-black leading-[1.6]">
+                  <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#282828]"></span>
+                  <span x-text="item"></span>
+                </li>
+              </template>
+            </ul>
           </div>
         </template>
 

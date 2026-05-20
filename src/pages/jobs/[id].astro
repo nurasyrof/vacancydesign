@@ -121,37 +121,35 @@ const schema: Record<string, unknown> = {
     {job.postType ? (
       <p class="text-[15px] text-[#111111] leading-[1.6] mb-8 whitespace-pre-line">{job.postText || job.summary}</p>
     ) : (
-      <>
-        <p class="text-[15px] text-[#111111] leading-[1.6] mb-8">{job.summary}</p>
+      <p class="text-[15px] text-[#111111] leading-[1.6] mb-8">{job.summary}</p>
+    )}
 
-        {job.responsibilities.length > 0 && (
-          <div class="mb-8">
-            <h2 class="text-[13px] font-semibold text-[#888888] uppercase tracking-wide mb-4">Responsibilities</h2>
-            <ul class="flex flex-col gap-3">
-              {job.responsibilities.map(r => (
-                <li class="flex items-start gap-2 text-[15px] text-[#111111] leading-[1.6]">
-                  <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#888888]"></span>
-                  {r}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+    {job.responsibilities.length > 0 && (
+      <div class="mb-8">
+        <h2 class="text-[13px] font-semibold text-[#888888] uppercase tracking-wide mb-4">Responsibilities</h2>
+        <ul class="flex flex-col gap-3">
+          {job.responsibilities.map(r => (
+            <li class="flex items-start gap-2 text-[15px] text-[#111111] leading-[1.6]">
+              <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#888888]"></span>
+              {r}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
 
-        {job.requirements.length > 0 && (
-          <div class="mb-10">
-            <h2 class="text-[13px] font-semibold text-[#888888] uppercase tracking-wide mb-4">Requirements</h2>
-            <ul class="flex flex-col gap-3">
-              {job.requirements.map(r => (
-                <li class="flex items-start gap-2 text-[15px] text-[#111111] leading-[1.6]">
-                  <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#888888]"></span>
-                  {r}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </>
+    {job.requirements.length > 0 && (
+      <div class="mb-10">
+        <h2 class="text-[13px] font-semibold text-[#888888] uppercase tracking-wide mb-4">Requirements</h2>
+        <ul class="flex flex-col gap-3">
+          {job.requirements.map(r => (
+            <li class="flex items-start gap-2 text-[15px] text-[#111111] leading-[1.6]">
+              <span class="mt-2 shrink-0 w-1 h-1 rounded-full bg-[#888888]"></span>
+              {r}
+            </li>
+          ))}
+        </ul>
+      </div>
     )}
 
     {job.postType ? (
