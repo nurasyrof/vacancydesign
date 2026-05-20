@@ -29,6 +29,48 @@ export function parseBlocks(raw: string): Block[] {
   return blocks;
 }
 
+function tagApplyUrl(url: string): string {
+  if (!url) return url;
+  try {
+    const u = new URL(url);
+    u.searchParams.set('utm_source', 'vacancy.design');
+    u.searchParams.set('utm_medium', 'job_board');
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
+async function fetchTweetData(tweetUrl: string): Promise<{ text: string; handle: string }> {
+  try {
+    const res = await fetch(
+      `https://publish.twitter.com/oembed?url=${encodeURIComponent(tweetUrl)}&omit_script=true`
+    );
+    if (!res.ok) return { text: '', handle: '' };
+    const data = await res.json() as { author_url?: string; html?: string };
+
+    const handle = data.author_url?.split('/').filter(Boolean).pop() ?? '';
+
+    const pMatch = data.html?.match(/<p[^>]*>([\s\S]*?)<\/p>/);
+    let text = pMatch?.[1] ?? '';
+    text = text
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<a[^>]*>([\s\S]*?)<\/a>/g, '$1')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&nbsp;/g, ' ')
+      .trim();
+
+    return { text, handle };
+  } catch {
+    return { text: '', handle: '' };
+  }
+}
+
 function parseCsvRow(row: Record<string, string>): Job {
   return {
     id: row.id?.trim() ?? '',
@@ -40,12 +82,16 @@ function parseCsvRow(row: Record<string, string>): Job {
     summary: row.summary?.trim() ?? '',
     responsibilities: (row.responsibilities ?? '').split('|').map(s => s.trim()).filter(Boolean),
     requirements: (row.requirements ?? '').split('|').map(s => s.trim()).filter(Boolean),
-    applyUrl: row.applyUrl?.trim() ?? '',
+    applyUrl: tagApplyUrl(row.applyUrl?.trim() ?? ''),
     postedDate: row.postedDate?.trim() ?? '',
     expiryDate: row.expiryDate?.trim() ?? '',
     active: row.active?.trim().toUpperCase() === 'TRUE',
     isBoosted: row.isBoosted?.trim().toUpperCase() === 'TRUE',
     logoUrl: row.logoUrl?.trim() ?? '',
+    tweetUrl: row.tweetUrl?.trim() ?? '',
+    tweetVerified: row.tweetVerified?.trim().toUpperCase() === 'TRUE',
+    tweetText: '',
+    tweetHandle: '',
   };
 }
 
@@ -69,8 +115,19 @@ export async function getJobs(): Promise<Job[]> {
 
   const boosted = jobs.filter(j => j.isBoosted).sort(byDate);
   const regular = jobs.filter(j => !j.isBoosted).sort(byDate);
+  const sorted = [...boosted, ...regular];
 
-  return [...boosted, ...regular];
+  await Promise.all(
+    sorted.map(async job => {
+      if (job.tweetUrl) {
+        const { text, handle } = await fetchTweetData(job.tweetUrl);
+        job.tweetText = text;
+        job.tweetHandle = handle;
+      }
+    })
+  );
+
+  return sorted;
 }
 
 function byDate(a: Job, b: Job): number {

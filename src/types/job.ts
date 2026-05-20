@@ -14,4 +14,8 @@ export interface Job {
   active: boolean;
   isBoosted: boolean;
   logoUrl: string;
+  tweetUrl: string;
+  tweetVerified: boolean;
+  tweetText: string;
+  tweetHandle: string;
 }
