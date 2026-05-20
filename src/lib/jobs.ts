@@ -63,6 +63,9 @@ async function fetchTweetData(tweetUrl: string): Promise<{ text: string; handle:
       .replace(/&quot;/g, '"')
       .replace(/&#39;/g, "'")
       .replace(/&nbsp;/g, ' ')
+      .replace(/pic\.twitter\.com\/\S+/g, '')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
       .trim();
 
     return { text, handle };
