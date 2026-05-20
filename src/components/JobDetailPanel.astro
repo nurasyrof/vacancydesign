@@ -79,7 +79,7 @@
         <!-- Posted by @handle (tweet jobs) -->
         <template x-if="job && job.tweetUrl">
           <div class="flex items-center gap-1.5">
-            <span class="text-[12px] text-[#282828] opacity-60">Posted by</span>
+            <span class="text-[12px] text-[#282828] opacity-60">A tweet by</span>
             <span class="text-[12px] font-medium text-[#282828]" x-text="'@' + (job.tweetHandle || 'unknown')"></span>
             <template x-if="job.tweetVerified">
               <svg width="14" height="14" viewBox="0 0 22 22" fill="#1D9BF0" aria-label="Verified">

@@ -84,7 +84,7 @@ const schema: Record<string, unknown> = {
 
         {job.tweetUrl && (
           <div class="flex items-center gap-1.5 mt-1">
-            <span class="text-[13px] text-[#888888]">Posted by</span>
+            <span class="text-[13px] text-[#888888]">A tweet by</span>
             <span class="text-[13px] font-medium text-[#888888]">@{job.tweetHandle || 'unknown'}</span>
             {job.tweetVerified && (
               <svg width="14" height="14" viewBox="0 0 22 22" fill="#1D9BF0" aria-label="Verified">
