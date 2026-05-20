@@ -1,4 +1,4 @@
-import type { Job } from '../types/job';
+import type { Job, PostType } from '../types/job';
 
 const CSV_URL = import.meta.env.GOOGLE_SHEETS_CSV_URL as string;
 
@@ -29,10 +29,24 @@ export function parseBlocks(raw: string): Block[] {
   return blocks;
 }
 
+const SOCIAL_HOSTS = new Set(['x.com', 'twitter.com', 'threads.com', 'threads.net']);
+
+function detectPostType(url: string): PostType {
+  try {
+    const hostname = new URL(url).hostname.replace(/^www\./, '');
+    if (hostname === 'x.com' || hostname === 'twitter.com') return 'twitter';
+    if (hostname === 'threads.com' || hostname === 'threads.net') return 'threads';
+    return '';
+  } catch {
+    return '';
+  }
+}
+
 function tagApplyUrl(url: string): string {
   if (!url) return url;
   try {
     const u = new URL(url);
+    if (SOCIAL_HOSTS.has(u.hostname.replace(/^www\./, ''))) return url;
     u.searchParams.set('utm_source', 'vacancy.design');
     u.searchParams.set('utm_medium', 'job_board');
     return u.toString();
@@ -41,19 +55,28 @@ function tagApplyUrl(url: string): string {
   }
 }
 
-async function fetchTweetData(tweetUrl: string): Promise<{ text: string; handle: string }> {
+async function fetchPostData(url: string, type: PostType): Promise<{ text: string; handle: string }> {
+  const oembedBase = type === 'twitter'
+    ? 'https://publish.twitter.com/oembed'
+    : 'https://www.threads.net/oembed/';
+
   try {
-    const res = await fetch(
-      `https://publish.twitter.com/oembed?url=${encodeURIComponent(tweetUrl)}&omit_script=true`
-    );
+    const res = await fetch(`${oembedBase}?url=${encodeURIComponent(url)}&omit_script=true`);
     if (!res.ok) return { text: '', handle: '' };
     const data = await res.json() as { author_url?: string; html?: string };
 
-    const handle = data.author_url?.split('/').filter(Boolean).pop() ?? '';
+    const rawHandle = data.author_url?.split('/').filter(Boolean).pop() ?? '';
+    const handle = rawHandle.replace(/^@/, '');
 
-    const pMatch = data.html?.match(/<p[^>]*>([\s\S]*?)<\/p>/);
-    let text = pMatch?.[1] ?? '';
-    text = text
+    const html = data.html ?? '';
+    let textSource = html.match(/<p[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? '';
+
+    // Threads fallback: extract all text from inside the blockquote
+    if (!textSource && type === 'threads') {
+      textSource = html.match(/<blockquote[^>]*>([\s\S]*?)<\/blockquote>/)?.[1] ?? '';
+    }
+
+    let text = textSource
       .replace(/<br\s*\/?>/gi, '\n')
       .replace(/<a[^>]*>([\s\S]*?)<\/a>/g, '$1')
       .replace(/<[^>]+>/g, '')
@@ -91,10 +114,10 @@ function parseCsvRow(row: Record<string, string>): Job {
     active: row.active?.trim().toUpperCase() === 'TRUE',
     isBoosted: row.isBoosted?.trim().toUpperCase() === 'TRUE',
     logoUrl: row.logoUrl?.trim() ?? '',
-    tweetUrl: row.tweetUrl?.trim() ?? '',
-    tweetVerified: row.tweetVerified?.trim().toUpperCase() === 'TRUE',
-    tweetText: '',
-    tweetHandle: '',
+    postVerified: row.postVerified?.trim().toUpperCase() === 'TRUE',
+    postType: '',
+    postText: '',
+    postHandle: '',
   };
 }
 
@@ -122,10 +145,12 @@ export async function getJobs(): Promise<Job[]> {
 
   await Promise.all(
     sorted.map(async job => {
-      if (job.tweetUrl) {
-        const { text, handle } = await fetchTweetData(job.tweetUrl);
-        job.tweetText = text;
-        job.tweetHandle = handle;
+      const postType = detectPostType(job.applyUrl);
+      if (postType) {
+        const { text, handle } = await fetchPostData(job.applyUrl, postType);
+        job.postType = postType;
+        job.postText = text;
+        job.postHandle = handle;
       }
     })
   );

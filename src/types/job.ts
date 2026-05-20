@@ -1,3 +1,5 @@
+export type PostType = 'twitter' | 'threads' | '';
+
 export interface Job {
   id: string;
   companyName: string;
@@ -14,8 +16,8 @@ export interface Job {
   active: boolean;
   isBoosted: boolean;
   logoUrl: string;
-  tweetUrl: string;
-  tweetVerified: boolean;
-  tweetText: string;
-  tweetHandle: string;
+  postVerified: boolean;
+  postType: PostType;
+  postText: string;
+  postHandle: string;
 }
