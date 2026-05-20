@@ -10,6 +10,10 @@ interface Props {
 
 const { job, index } = Astro.props;
 const location = locationLabel(job);
+const words = job.companyName.trim().split(/\s+/).filter(Boolean);
+const initials = words.length >= 2
+  ? (words[0][0] + words[1][0]).toUpperCase()
+  : job.companyName.slice(0, 2).toUpperCase();
 ---
 
 <!-- Mobile layout -->
@@ -21,7 +25,7 @@ const location = locationLabel(job);
           {job.logoUrl ? (
             <img src={job.logoUrl} alt={`${job.companyName} logo`} class="w-full h-full object-cover" loading="lazy" />
           ) : (
-            <span class="text-[13px] font-semibold text-[#888888]">{job.companyName.charAt(0).toUpperCase()}</span>
+            <span class="text-[11px] font-semibold text-[#888888]">{initials}</span>
           )}
         </div>
         {job.isBoosted && <FeaturedBadge />}
@@ -61,7 +65,7 @@ const location = locationLabel(job);
       {job.logoUrl ? (
         <img src={job.logoUrl} alt={`${job.companyName} logo`} class="w-full h-full object-cover" loading="lazy" />
       ) : (
-        <span class="text-[13px] font-semibold text-[#888888]">{job.companyName.charAt(0).toUpperCase()}</span>
+        <span class="text-[11px] font-semibold text-[#888888]">{initials}</span>
       )}
     </div>
     {job.isBoosted && <FeaturedBadge />}
