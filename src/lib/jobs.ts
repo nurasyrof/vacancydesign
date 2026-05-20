@@ -31,6 +31,15 @@ export function parseBlocks(raw: string): Block[] {
 
 const SOCIAL_HOSTS = new Set(['x.com', 'twitter.com', 'threads.com', 'threads.net']);
 
+function extractHandleFromUrl(url: string): string {
+  try {
+    const parts = new URL(url).pathname.split('/').filter(Boolean);
+    return (parts[0] ?? '').replace(/^@/, '');
+  } catch {
+    return '';
+  }
+}
+
 function detectPostType(url: string): PostType {
   try {
     const hostname = new URL(url).hostname.replace(/^www\./, '');
@@ -150,7 +159,7 @@ export async function getJobs(): Promise<Job[]> {
         const { text, handle } = await fetchPostData(job.applyUrl, postType);
         job.postType = postType;
         job.postText = text;
-        job.postHandle = handle;
+        job.postHandle = handle || extractHandleFromUrl(job.applyUrl);
       }
     })
   );

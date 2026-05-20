@@ -108,7 +108,7 @@
 
         <!-- Post text (social post jobs) -->
         <template x-if="job && job.postType">
-          <p class="text-[13px] text-black leading-[1.6] whitespace-pre-line" x-text="job.postText"></p>
+          <p class="text-[13px] text-black leading-[1.6] whitespace-pre-line" x-text="job.postText || job.summary"></p>
         </template>
 
         <!-- Standard content (non-social jobs) -->

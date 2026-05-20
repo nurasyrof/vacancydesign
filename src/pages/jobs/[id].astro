@@ -119,7 +119,7 @@ const schema: Record<string, unknown> = {
     <div class="border-t border-[#E5E5E5] mb-6"></div>
 
     {job.postType ? (
-      <p class="text-[15px] text-[#111111] leading-[1.6] mb-8 whitespace-pre-line">{job.postText}</p>
+      <p class="text-[15px] text-[#111111] leading-[1.6] mb-8 whitespace-pre-line">{job.postText || job.summary}</p>
     ) : (
       <>
         <p class="text-[15px] text-[#111111] leading-[1.6] mb-8">{job.summary}</p>
