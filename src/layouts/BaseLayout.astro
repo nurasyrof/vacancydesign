@@ -61,6 +61,17 @@ const resolvedCanonical = canonical ?? `https://vacancy.design${Astro.url.pathna
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   </head>
   <body class="bg-white text-[#111111] font-sans antialiased h-screen overflow-hidden flex flex-col">
+    <!-- Cross-promo banner -->
+    <a
+      href="https://tryresumebuilder.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="shrink-0 flex items-center justify-center gap-2 bg-[#111111] text-white text-[12px] md:text-[13px] font-medium text-center px-4 py-[9px] hover:bg-black transition-colors"
+    >
+      <span>Boost your resume quality with our FREE resume builder <span class="font-semibold underline underline-offset-2">ResumeLite</span></span>
+      <span aria-hidden="true">→</span>
+    </a>
+
     <!-- Desktop header -->
     <header class="hidden md:flex h-[80px] shrink-0 border-b border-[#dcdcdc] items-center gap-3 px-[80px]">
       <a href="/" class="flex items-center gap-3">
