@@ -1,5 +1,4 @@
 ---
-import FeaturedBadge from './FeaturedBadge.astro';
 import PromotedBadge from './PromotedBadge.astro';
 import type { Job } from '../types/job';
 import { locationLabel } from '../lib/jobs';
@@ -30,7 +29,6 @@ const initials = words.length >= 2
             <span class="text-[11px] font-semibold text-[#888888]">{initials}</span>
           )}
         </div>
-        {job.isBoosted && <FeaturedBadge />}
       </div>
       <div class="flex flex-col min-w-0">
         <span class="text-[12px] text-[#282828] opacity-60 truncate">{job.companyName}</span>
@@ -71,7 +69,6 @@ const initials = words.length >= 2
         <span class="text-[11px] font-semibold text-[#888888]">{initials}</span>
       )}
     </div>
-    {job.isBoosted && <FeaturedBadge />}
   </div>
 
   <div class="flex-1 min-w-0">
