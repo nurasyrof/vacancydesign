@@ -1,5 +1,6 @@
 ---
 import FeaturedBadge from './FeaturedBadge.astro';
+import PromotedBadge from './PromotedBadge.astro';
 import type { Job } from '../types/job';
 import { locationLabel } from '../lib/jobs';
 
@@ -17,10 +18,11 @@ const initials = words.length >= 2
 ---
 
 <!-- Mobile layout -->
-<div class="md:hidden px-4 py-6 flex flex-col gap-6 border-b border-[#d8d8d8]">
+<div class="md:hidden relative px-4 py-6 flex flex-col gap-6 border-b border-[#d8d8d8]">
+  {job.isBoosted && <PromotedBadge />}
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-3 min-w-0">
-      <div class="relative shrink-0 w-12 h-12">
+      <div class="relative shrink-0 w-12 h-12 hidden">
         <div class="w-full h-full rounded-[12px] bg-[#d9d9d9] overflow-hidden flex items-center justify-center">
           {job.logoUrl ? (
             <img src={job.logoUrl} alt={`${job.companyName} logo`} class="w-full h-full object-cover" loading="lazy" />
@@ -56,11 +58,12 @@ const initials = words.length >= 2
 <!-- Desktop layout -->
 <button
   type="button"
-  class="hidden md:flex w-full text-left px-8 py-8 items-center gap-3 border-b border-[#d8d8d8] focus:outline-none transition-colors"
+  class="hidden md:flex relative w-full text-left px-8 py-8 items-center gap-3 border-b border-[#d8d8d8] focus:outline-none transition-colors"
   :class={`selectedIndex === ${index} ? 'bg-white border-r-2 border-r-black' : 'bg-transparent hover:bg-white'`}
   @click={`selectedIndex = ${index}`}
 >
-  <div class="relative shrink-0 w-12 h-12 flex items-center justify-center">
+  {job.isBoosted && <PromotedBadge />}
+  <div class="relative shrink-0 w-12 h-12 hidden">
     <div class="w-full h-full rounded-xl bg-[#d9d9d9] overflow-hidden flex items-center justify-center">
       {job.logoUrl ? (
         <img src={job.logoUrl} alt={`${job.companyName} logo`} class="w-full h-full object-cover" loading="lazy" />

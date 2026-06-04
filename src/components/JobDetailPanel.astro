@@ -15,7 +15,7 @@
       <div class="sticky top-0 bg-white z-10 pl-6 pr-20 pt-6 pb-4 border-b border-[#dcdcdc] flex flex-col gap-3">
         <!-- Role title + actions -->
         <div class="flex items-center justify-between">
-          <p class="font-manrope font-bold text-[16px] text-black" x-text="job ? job.roleTitle + ' details' : 'Job details'"></p>
+          <p class="font-manrope font-bold text-[16px] text-black"><span x-text="job ? job.roleTitle : 'Job details'"></span><span x-show="job" class="opacity-[0.32]"> at </span><span x-show="job" x-text="job ? job.companyName : ''"></span></p>
           <div class="flex items-center gap-2 shrink-0">
             <!-- Copy link button -->
             <button
